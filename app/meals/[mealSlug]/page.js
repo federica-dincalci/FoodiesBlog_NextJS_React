@@ -3,6 +3,19 @@ import classes from './page.module.css';
 import { getMeal } from '@/lib/meals';
 import { notFound } from 'next/navigation';
 
+//Since this is a dynamic page, we need to generate metadata for each meal with this function
+export async function generateMetadata({ params }) {
+    const meal = getMeal(params.mealSlug);
+
+    if (!meal)
+        notFound();
+
+    return {
+        title: meal.title,
+        description: meal.summary,
+    };
+}
+
 export default async function MealsDetailsPage({ params }) {
     const awaitedParams = await params;
     const meal = getMeal(awaitedParams.mealSlug);
